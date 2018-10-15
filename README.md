@@ -21,8 +21,8 @@ To configure your router, just set the `$CLEARTEXT_FTI` variable with your own `
 $ export CLEARTEXT_FTI=fti/xxxxxxx
 ```
 
-Then run
+Then, depending on which router you want to configure (`wrt1900acv2` or `wrt610n`), run the following command from your own machine:
 
 ```shell-session
-$ ./install
+$ ./install -r wrt1900acv2
 ```
