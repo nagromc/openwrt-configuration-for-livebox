@@ -11,7 +11,7 @@ You are welcome to open a Pull Request on this repo to share your knowledge.
 
 ## Requirements
 
-You need a Unix-like environment to run the installer. The installation script has **not** been tested on Windows (Cygwin).
+You need a Unix-like environment to run the installer. The installation script has **not** been tested on Windows (Cygwin or WSL).
 
 ## Installation
 
