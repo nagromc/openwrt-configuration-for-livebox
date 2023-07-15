@@ -1,0 +1,9 @@
+chain mangle_postrouting {
+    type filter hook postrouting priority mangle; policy accept;
+    oifname "wan.832" counter packets 115219 bytes 283033276 meta priority set 0:1
+    oifname "wan.832" ip protocol icmp counter packets 20 bytes 3689 meta priority set 0:6
+    oifname "wan.832" ip protocol igmp counter packets 0 bytes 0 meta priority set 0:6
+    oifname "wan.832" udp dport 67 counter packets 0 bytes 0 meta priority set 0:6
+    oifname "wan.832" udp dport 547 counter packets 0 bytes 0 meta priority set 0:6
+    oifname "wan.832" ip protocol ipv6-icmp counter packets 0 bytes 0 meta priority set 0:6
+}
