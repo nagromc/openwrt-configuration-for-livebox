@@ -23,21 +23,24 @@ if [ -z "$AUTH_SEND_OPTION" ]; then
     exit 2
 fi
 
-if [ -z "$HW_ADDRESS" ]; then
-    echo "\$HW_ADDRESS is empty. Please set it with: \`export HW_ADDRESS=A1:B2:C3:D4:E5:F6\`"
+if [ -z "$LB_HW_ADDRESS" ]; then
+    echo "\$LB_HW_ADDRESS is empty. This variable holds the original Livebox hardware address. Please set it with: \`export LB_HW_ADDRESS=A1:B2:C3:D4:E5:F6\`"
     exit 2
 fi
 
-HW_ADDRESS_WITHOUT_COLONS=$(echo $HW_ADDRESS | sed "s/://g")
+LB_HW_ADDRESS_WITHOUT_COLONS=$(echo $LB_HW_ADDRESS | sed "s/://g")
 
 scp -O $BASEDIR/$chosen_router*.config root@192.168.1.1:/tmp/
 scp -O $BASEDIR/$chosen_router*.nft root@192.168.1.1:/etc/nftables.d/
-ssh root@192.168.1.1 "cat /tmp/$chosen_router.network.config | uci -m import network"
-# set hardware address of wan.832
-ssh root@192.168.1.1 "uci set network.cfg080f15.macaddr='$HW_ADDRESS'"
-ssh root@192.168.1.1 "uci set network.wan.sendopts='77:2b46535644534c5f6c697665626f782e496e7465726e65742e736f66746174686f6d652e4c697665626f7836 90:$AUTH_SEND_OPTION'"
-ssh root@192.168.1.1 "uci set network.wan.clientid='01$HW_ADDRESS_WITHOUT_COLONS'"
-ssh root@192.168.1.1 "uci set network.wan6.sendopts='11:$AUTH_SEND_OPTION 15:FSVDSL_livebox.Internet.softathome.Livebox6 16:0000040e0005736167656d 17:000005580006000e495056365f524551554553544544'"
-ssh root@192.168.1.1 "uci set network.wan6.clientid='00030001$HW_ADDRESS_WITHOUT_COLONS'"
-ssh root@192.168.1.1 "uci commit"
-echo "Installation completed. Your router is now rebooting..." && ssh root@192.168.1.1 "reboot"
+ssh root@192.168.1.1 /usr/bin/env sh << EOF
+    cat /tmp/$chosen_router.network.config | uci -m import network
+    # set hardware address of wan.832
+    uci set network.cfg080f15.macaddr='$LB_HW_ADDRESS'
+    uci set network.wan.sendopts='77:2b46535644534c5f6c697665626f782e496e7465726e65742e736f66746174686f6d652e4c697665626f7836 90:$AUTH_SEND_OPTION'
+    uci set network.wan.clientid='01$LB_HW_ADDRESS_WITHOUT_COLONS'
+    uci set network.wan6.sendopts='11:$AUTH_SEND_OPTION 15:FSVDSL_livebox.Internet.softathome.Livebox6 16:0000040e0005736167656d 17:000005580006000e495056365f524551554553544544'
+    uci set network.wan6.clientid='00030001$LB_HW_ADDRESS_WITHOUT_COLONS'
+    uci commit
+    echo "Installation completed. Your router is now rebooting..."
+    reboot
+EOF
