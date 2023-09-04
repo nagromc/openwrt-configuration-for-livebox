@@ -28,6 +28,7 @@ if [ -z "$LB_HW_ADDRESS" ]; then
     exit 2
 fi
 
+AUTH_SEND_OPTION_WITHOUT_COLONS=$(echo $AUTH_SEND_OPTION | sed "s/://g")
 LB_HW_ADDRESS_WITHOUT_COLONS=$(echo $LB_HW_ADDRESS | sed "s/://g")
 
 scp -O $BASEDIR/$chosen_router*.config root@192.168.1.1:/tmp/
@@ -36,9 +37,9 @@ ssh root@192.168.1.1 /usr/bin/env sh << EOF
     cat /tmp/$chosen_router.network.config | uci -m import network
     # set hardware address of wan.832
     uci set network.cfg080f15.macaddr='$LB_HW_ADDRESS'
-    uci set network.wan.sendopts='77:2b46535644534c5f6c697665626f782e496e7465726e65742e736f66746174686f6d652e4c697665626f7836 90:$AUTH_SEND_OPTION'
+    uci set network.wan.sendopts='77:2b46535644534c5f6c697665626f782e496e7465726e65742e736f66746174686f6d652e4c697665626f7836 90:$AUTH_SEND_OPTION_WITHOUT_COLONS'
     uci set network.wan.clientid='01$LB_HW_ADDRESS_WITHOUT_COLONS'
-    uci set network.wan6.sendopts='11:$AUTH_SEND_OPTION 15:FSVDSL_livebox.Internet.softathome.Livebox6 16:0000040e0005736167656d 17:000005580006000e495056365f524551554553544544'
+    uci set network.wan6.sendopts='11:$AUTH_SEND_OPTION_WITHOUT_COLONS 15:FSVDSL_livebox.Internet.softathome.Livebox6 16:0000040e0005736167656d 17:000005580006000e495056365f524551554553544544'
     uci set network.wan6.clientid='00030001$LB_HW_ADDRESS_WITHOUT_COLONS'
     uci commit
     echo "Installation completed. Your router is now rebooting..."
