@@ -24,12 +24,12 @@ if [ -z "$chosen_router" ]; then
 fi
 
 if [ -z "$AUTH_SEND_OPTION" ]; then
-    echo "\$AUTH_SEND_OPTION is empty. Use https://jsfiddle.net/kgersen/3mnsc6wy/ to generate a token, and set it with \`export AUTH_SEND_OPTION=<result value>\`"
+    echo "\$AUTH_SEND_OPTION is empty. Use https://jsfiddle.net/kgersen/3mnsc6wy/ to generate a token, and set it with \`export AUTH_SEND_OPTION=<result value>\`" >&2
     exit 2
 fi
 
 if [ -z "$LB_HW_ADDRESS" ]; then
-    echo "\$LB_HW_ADDRESS is empty. This variable holds the original Livebox hardware address. Please set it with: \`export LB_HW_ADDRESS=A1:B2:C3:D4:E5:F6\`"
+    echo "\$LB_HW_ADDRESS is empty. This variable holds the original Livebox hardware address. Please set it with: \`export LB_HW_ADDRESS=A1:B2:C3:D4:E5:F6\`" >&2
     exit 2
 fi
 
